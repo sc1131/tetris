@@ -62,9 +62,9 @@ document.addEventListener("DOMContentLoaded",()=>
         miniMatrix.appendChild(cell);
     }
 
-    let squares=Array.from(document.querySelector('#grid').children);
+    let gridSquares=Array.from(document.querySelector('#grid').children);
 
-    console.log(squares);
+    console.log(gridSquares);
 
 
     //Choose random Tetromino from "Tetrominoes" index
@@ -80,8 +80,8 @@ document.addEventListener("DOMContentLoaded",()=>
         currentTetro.forEach(block=>{
             //classList.add is used to dd one or more classes to css element
             // Here particular blocks in the grid are specified to be restyled within CSS file under class 'tetromino'
-            squares[currentPosition+block].classList.add('tetromino');
-            squares[currentPosition+block].style.backgroundColor=colours[currentColourIndex];
+            gridSquares[currentPosition+block].classList.add('tetromino');
+            gridSquares[currentPosition+block].style.backgroundColor=colours[currentColourIndex];
         })
     }
 
@@ -89,8 +89,8 @@ document.addEventListener("DOMContentLoaded",()=>
     function unrender()
     {
         currentTetro.forEach(block => {
-            squares[currentPosition +block].classList.remove('tetromino')
-            squares[currentPosition+block].style.backgroundColor='';
+            gridSquares[currentPosition +block].classList.remove('tetromino')
+            gridSquares[currentPosition+block].style.backgroundColor='';
         })
     }
 
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded",()=>
 
     function freezeTetro(cells){
 
-        cells.forEach(block => squares[currentPosition + block].classList.add('occupied'));
+        cells.forEach(block => gridSquares[currentPosition + block].classList.add('occupied'));
 
     }
 
@@ -142,35 +142,35 @@ document.addEventListener("DOMContentLoaded",()=>
     // Checks if cells in grid are occupied by tetromino
     function takenTetro(tetroCells)
     {
-       return tetroCells.some(block=>squares[currentPosition+block].classList.contains('occupied'));
+       return tetroCells.some(block=>gridSquares[currentPosition+block].classList.contains('occupied'));
 
     }
 
     // Checks if all cells are occupied
     function takenAll(cells){
 
-        return cells.every(block=>squares[block].classList.contains('occupied'));
+        return cells.every(block=>gridSquares[block].classList.contains('occupied'));
 
     }
 
     //Checks if any of the cells are occupied
     function takenSome(cells){
 
-    return cells.some(block=>squares[block].classList.contains('occupied'))
+    return cells.some(block=>gridSquares[block].classList.contains('occupied'))
     }
 
     function takenBelow(cells){
 
-        return cells.some(block=>squares[currentPosition +block+gridWidth].classList.contains('occupied'))
+        return cells.some(block=>gridSquares[currentPosition +block+gridWidth].classList.contains('occupied'))
 
     }
 
     function removeAnyCells(cells){
 
         cells.forEach(block=>{
-            squares[block].classList.remove('occupied');
-            squares[block].classList.remove('tetromino');
-            squares[block].style.backgroundColor='';
+            gridSquares[block].classList.remove('occupied');
+            gridSquares[block].classList.remove('tetromino');
+            gridSquares[block].style.backgroundColor='';
 
         })
     }
@@ -305,14 +305,14 @@ for(let i=0;i<gridHeight;i++)
         scoreDisplay.innerHTML=score;
         removeAnyCells(row)
         //Full row is removed, now all remaining blocks need to move down one unit
-        const squaresRemoved=squares.splice(i*gridWidth,gridWidth);
+        const squaresRemoved=gridSquares.splice(i*gridWidth,gridWidth);
 
         console.log(squaresRemoved);
         //row reinserted by combining squares with squares removed array
-        squares=squaresRemoved.concat(squares);
-        console.log(squares);
+        gridSquares=squaresRemoved.concat(gridSquares);
+        console.log(gridSquares);
         console.log(matrix.childNodes);
-       squares.forEach(cell=>matrix.appendChild(cell));
+       gridSquares.forEach(cell=>matrix.appendChild(cell));
         console.log(matrix.childNodes);
 
     }
@@ -340,19 +340,6 @@ for(let i=0;i<gridHeight;i++)
                 renderNextTetro();
             }
         }})
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 })
 
