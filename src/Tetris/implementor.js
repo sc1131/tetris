@@ -4,30 +4,37 @@ document.addEventListener("DOMContentLoaded",()=>
 {
     let matrix = document.querySelector('#grid');
     let miniMatrix= document.querySelector('#small-grid')
+    const scoreDisplay=document.querySelector('#score');
+    const startButton=document.querySelector('#start_button');
     let timerId;
 
 
+    //grid and mini-grid dimensions
     const gridWidth=10;
     const gridHeight = 20;
-
     const miniGridWidth=4;
     const miniGridHeight=4;
-    const scoreDisplay=document.querySelector('#score');
-    const startButton=document.querySelector('#start_button');
+
+
+    //Initialised at -1 so no tetromino is rendered in small grid before start
     let nextTetroIndex=-1;
     let nextColourIndex = 0;
-
     let score=0;
+
     const colours=['orange','red','green','blue']
     const square =1;
     const noNextTetro=-1;
     const tetroNumber = 5;
-    const max=tetroNumber-1;
-    const min=0;
+
+    // Generate random tetromino and colour
     let currentTetroIndex =Math.floor(Math.random()*(tetroNumber));
     let currentColourIndex = Math.floor(Math.random()*(colours.length));
+
+    //Starting position
     let currentPosition=4;
+    //Starting rotation
     let currentRotation =0;
+    //initial tetromino with given rotation
     let currentTetro=tetro(gridWidth)[currentTetroIndex][currentRotation];
 
 
@@ -60,13 +67,11 @@ document.addEventListener("DOMContentLoaded",()=>
     console.log(squares);
 
 
-
-
     //Choose random Tetromino from "Tetrominoes" index
 
     console.log("RandomStart:"+currentTetroIndex);
 
-    //Starting position and initial tetromino with given rotation
+
 
 
     //render tetromino
@@ -134,20 +139,21 @@ document.addEventListener("DOMContentLoaded",()=>
 
     }
 
-    //checks if cells in grid are occupied
-
+    // Checks if cells in grid are occupied by tetromino
     function takenTetro(tetroCells)
     {
        return tetroCells.some(block=>squares[currentPosition+block].classList.contains('occupied'));
 
     }
 
+    // Checks if all cells are occupied
     function takenAll(cells){
 
         return cells.every(block=>squares[block].classList.contains('occupied'));
 
     }
 
+    //Checks if any of the cells are occupied
     function takenSome(cells){
 
     return cells.some(block=>squares[block].classList.contains('occupied'))
@@ -159,12 +165,22 @@ document.addEventListener("DOMContentLoaded",()=>
 
     }
 
+    function removeAnyCells(cells){
+
+        cells.forEach(block=>{
+            squares[block].classList.remove('occupied');
+            squares[block].classList.remove('tetromino');
+            squares[block].style.backgroundColor='';
+
+        })
+    }
+
 
     function moveDown(){
 
         unrender()
         //Check that there is no conflict before tetromino is rendern
-        // wihthout check, tetromino is moved down through another tetromino or through grid,then check would happen too late!
+        // withhout check, tetromino is moved down through another tetromino or through grid,then check would happen too late!
         if(!takenTetro(currentTetro)) {
             currentPosition += gridWidth;
         }
@@ -186,7 +202,6 @@ document.addEventListener("DOMContentLoaded",()=>
     }
 
 
-
     function moveRight() {
         unrender();
 
@@ -199,6 +214,7 @@ document.addEventListener("DOMContentLoaded",()=>
         render();
     }
 
+    // Rotates tetromino
     function rotate(){
 
         let nextRotation=(currentRotation+1)%currentTetro.length;
@@ -225,8 +241,8 @@ document.addEventListener("DOMContentLoaded",()=>
     function isSplit(tetromino){
         return (isAtLeftEdge(tetromino)&&isAtRightEdge(tetromino));
     }
-//Checks boundaries
 
+    //Checks right-hand boundary
     function isAtRightEdge(tetromino)
     {
 
@@ -234,6 +250,7 @@ document.addEventListener("DOMContentLoaded",()=>
 
     }
 
+    //Checks left-hand boundary
     function isAtLeftEdge(tetromino) {
 
         return tetromino.some(block=>(currentPosition+block)%10===0);
@@ -241,10 +258,8 @@ document.addEventListener("DOMContentLoaded",()=>
     }
 
 
-
-
     //Binds keys/events to functions
-    function control(e)
+    function keyControls(e)
     {
         switch(e.keyCode) {
 
@@ -256,25 +271,27 @@ document.addEventListener("DOMContentLoaded",()=>
         }
     }
 
-    const displaySquares=document.querySelectorAll("#small-grid div");
-    console.log(displaySquares);
+    const smallGridSquares=document.querySelectorAll("#small-grid div");
+    console.log(smallGridSquares);
     let displayIndex=0;
 
 
+    //Render next tetromino in small grid
     function renderNextTetro()
     {
-        displaySquares.forEach(square=>{
+        smallGridSquares.forEach(square=>{
             square.classList.remove('tetromino')
             square.style.backgroundColor='';
         })
 
         tetro(miniGridWidth)[nextTetroIndex][0].forEach(block=>{
-            displaySquares[displayIndex+block].classList.add('tetromino');
-            displaySquares[displayIndex+block].style.backgroundColor=colours[nextColourIndex];
+            smallGridSquares[displayIndex+block].classList.add('tetromino');
+            smallGridSquares[displayIndex+block].style.backgroundColor=colours[nextColourIndex];
         })
 
 }
 
+//Removes complete rows and updates score display
 function displayScore(){
 for(let i=0;i<gridHeight;i++)
 {
@@ -282,20 +299,12 @@ for(let i=0;i<gridHeight;i++)
     for(let j=0;j<gridWidth;j++){
         row.push(i*gridWidth+j)
     }
-
     console.log(row);
     if(takenAll(row)){
         score+=10;
         scoreDisplay.innerHTML=score;
-        row.forEach(block=>{
-            squares[block].classList.remove('occupied');
-            squares[block].classList.remove('tetromino');
-            squares[block].style.backgroundColor='';
-
-        })
-
-        console.log("In loop");
-        //After full row is removed, all remaining blocks need to move down one unit
+        removeAnyCells(row)
+        //Full row is removed, now all remaining blocks need to move down one unit
         const squaresRemoved=squares.splice(i*gridWidth,gridWidth);
 
         console.log(squaresRemoved);
@@ -312,17 +321,19 @@ for(let i=0;i<gridHeight;i++)
 
 }
 
-
  startButton.addEventListener('click',()=>{
         if(timerId){
             clearInterval(timerId);//is not null
                 timerId=null; //Pauses game
-            // document.removeEventListener('keyup',control);
+            document.removeEventListener('keyup',keyControls);
         }
-        else{   //Starts/resumes game
+        else{
+            //Starts/resumes game
             render();
+
+            //make the teromino move down grid every second/1000ms
             timerId=setInterval(moveDown,1000);
-            document.addEventListener('keyup', control);
+            document.addEventListener('keyup', keyControls);
             if(nextTetroIndex===noNextTetro) {
                 nextTetroIndex = Math.floor(Math.random() * tetro.length);
                 console.log("NextRandom: "+nextTetroIndex)
@@ -334,21 +345,16 @@ for(let i=0;i<gridHeight;i++)
 
 
 
-    //Ensures function will be executed when key is typed
 
 
 
 
 
-    //Execute program!
 
 
-//make the teromino move down grid every second
-// function movedown is executed every 1000ms/1s
 
 
 })
 
-// Utility Functions
 
 

@@ -11,7 +11,6 @@
 }
 
 
-
 #grid{
     margin-top:10px;
     margin-left:140px;
@@ -56,7 +55,6 @@
     background-image: url("Images/tetris-mini-grid.png");
     background-size: 100%;
 
-    /*background-color: yellow;*/
 }
 
 #small-grid div
@@ -82,7 +80,7 @@
 /*Style Navbar across all pages*/
 
 /* Add a blue background color to the centre of navbar */
-.topnav {
+.navbar {
     background-color: blue;
     overflow: hidden;
 }
@@ -90,7 +88,7 @@
 /* Style the links inside the navigation bar */
 
 
-.topnav a {
+.navbar a {
     float: left;
     font-family: Belinksy;
     font-weight:bold;
@@ -104,15 +102,16 @@
     font-size: 12px;
 }
 
-.right-topnav {
-    float: right;
-}
-
 /* Change the color of links on hover */
-.topnav a:hover {
+.navbar a:hover {
     background-color: #ddd;
     color: black;
 }
+
+.right-navbar {
+    float: right;
+}
+
 
 
 

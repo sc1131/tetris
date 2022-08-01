@@ -49,11 +49,11 @@ $result=$conn->query($sql);
 
 </head>
 
-<div class="topnav">
+<div class="navbar">
 
     <a href="index.php">Home</a>
 
-    <div class="right-topnav">
+    <div class="right-navbar">
 
         <a href="tetris.php">Play Tetris</a>
         <a href="leaderboard.php">Leaderboard</a>
