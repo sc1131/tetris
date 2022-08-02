@@ -3,7 +3,7 @@ document.write('<script type="text/javascript" src="utility_functions.js" ></scr
 document.addEventListener("DOMContentLoaded",()=>
 {
     let matrix = document.querySelector('#grid');
-    let miniMatrix= document.querySelector('#small-grid')
+    let smallMatrix= document.querySelector('#small-grid')
     const scoreDisplay=document.querySelector('#score');
     const startButton=document.querySelector('#start_button');
     let timerId;
@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded",()=>
     //grid and mini-grid dimensions
     const gridWidth=10;
     const gridHeight = 20;
-    const miniGridWidth=4;
-    const miniGridHeight=4;
+    const smallGridWidth=4;
+    const smallGridHeight=4;
 
 
     //Initialised at -1 so no tetromino is rendered in small grid before start
@@ -56,13 +56,14 @@ document.addEventListener("DOMContentLoaded",()=>
         }
     }
 
-    for(x=0;x<miniGridWidth*miniGridHeight;x++)
+    for(x=0;x<smallGridWidth*smallGridHeight;x++)
     {
         let cell=document.createElement("div");
-        miniMatrix.appendChild(cell);
+        smallMatrix.appendChild(cell);
     }
 
     let gridSquares=Array.from(document.querySelector('#grid').children);
+    const smallGridSquares=document.querySelectorAll("#small-grid div");
 
     console.log(gridSquares);
 
@@ -70,7 +71,6 @@ document.addEventListener("DOMContentLoaded",()=>
     //Choose random Tetromino from "Tetrominoes" index
 
     console.log("RandomStart:"+currentTetroIndex);
-
 
 
 
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded",()=>
 
     }
 
-    function freeze()
+    function checkStatusAndUpdate()
     {
         //Checks next square below in grid for each "block" in teremino to see if it has 'occupied' class name
         if(takenBelow(currentTetro)) {
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded",()=>
             currentPosition += gridWidth;
         }
         render();
-        freeze();
+        checkStatusAndUpdate();
     }
 
     //move left, prevent tetremino moving off grid by establishing left boundary
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded",()=>
         }
     }
 
-    const smallGridSquares=document.querySelectorAll("#small-grid div");
+
     console.log(smallGridSquares);
     let displayIndex=0;
 
@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded",()=>
             square.style.backgroundColor='';
         })
 
-        tetro(miniGridWidth)[nextTetroIndex][0].forEach(block=>{
+        tetro(smallGridWidth)[nextTetroIndex][0].forEach(block=>{
             smallGridSquares[displayIndex+block].classList.add('tetromino');
             smallGridSquares[displayIndex+block].style.backgroundColor=colours[nextColourIndex];
         })

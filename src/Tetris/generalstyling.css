@@ -52,7 +52,7 @@
     height: 80px;
     display: flex;
     flex-wrap: wrap;
-    background-image: url("Images/tetris-mini-grid.png");
+    background-image: url("Images/tetris-small-grid.png");
     background-size: 100%;
 
 }
