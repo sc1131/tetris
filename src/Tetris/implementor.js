@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded",()=>
     let currentRotation =0;
     //initial tetromino with given rotation
     let currentTetro=tetro(gridWidth)[currentTetroIndex][currentRotation];
+    // Anchor for tetromino in small grid
+    let displayIndex=0;
 
 
 
@@ -258,9 +260,9 @@ document.addEventListener("DOMContentLoaded",()=>
     }
 
     //Binds keys/events to functions
-    function keyControls(e)
+    function keyControls(k)
     {
-        switch(e.keyCode) {
+        switch(k.keyCode) {
 
             case(37): {moveLeft(); break;}  //move left
             case(39): { moveRight(); break;} //move right
@@ -272,7 +274,7 @@ document.addEventListener("DOMContentLoaded",()=>
 
 
     console.log(smallGridSquares);
-    let displayIndex=0;
+
 
 
     //Render next tetromino in small grid
