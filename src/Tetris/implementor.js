@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded",()=>
 
         unrender()
         //Check that there is no conflict before tetromino is rendern
-        // withhout check, tetromino is moved down through another tetromino or through grid,then check would happen too late!
+        // without check, tetromino is moved down through another tetromino or through grid,then check would happen too late!
         if(!takenTetro(currentTetro)) {
             currentPosition += gridWidth;
         }
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded",()=>
     function moveLeft(){
         unrender();
 
-        if(! isAtLeftEdge(currentTetro)){currentPosition-=square;}
+        if(! checkLeftEdge(currentTetro)){currentPosition-=square;}
         //checks grid square not already taken, if so, then tetremino moved to the right by one square to prevent overlap
         if(takenTetro(currentTetro)){
             currentPosition+=square;
@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded",()=>
     function moveRight() {
         unrender();
 
-        if (!isAtRightEdge(currentTetro)) {
+        if (!checkRightEdge(currentTetro)) {
             currentPosition += square;
         }
         if (takenTetro(currentTetro)) {
@@ -239,11 +239,11 @@ document.addEventListener("DOMContentLoaded",()=>
 
     //Returns true if there are tetromino blocks on left AND right side of grid i.e. split tetromino
     function isSplit(tetromino){
-        return (isAtLeftEdge(tetromino)&&isAtRightEdge(tetromino));
+        return (checkLeftEdge(tetromino)&&checkRightEdge(tetromino));
     }
 
     //Checks right-hand boundary
-    function isAtRightEdge(tetromino)
+    function checkRightEdge(tetromino)
     {
 
         return tetromino.some(block => (currentPosition + block) % 10 === 9);
@@ -251,12 +251,11 @@ document.addEventListener("DOMContentLoaded",()=>
     }
 
     //Checks left-hand boundary
-    function isAtLeftEdge(tetromino) {
+    function checkLeftEdge(tetromino) {
 
         return tetromino.some(block=>(currentPosition+block)%10===0);
 
     }
-
 
     //Binds keys/events to functions
     function keyControls(e)
